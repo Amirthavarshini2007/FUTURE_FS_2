@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AMICART - Mini E-Commerce</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+  <h1>🛒 AMICART</h1>
+  <div class="nav-right">
+    <input 
+      type="text" 
+      id="searchInput" 
+      placeholder="Search products..." 
+      onkeyup="searchProducts()" 
+      class="search-box"
+    >
+    <button onclick="showLogin()">Login</button>
+    <button onclick="openCart()">Cart (<span id="cartCount">0</span>)</button>
+    <button onclick="openWishlist()">Wishlist</button>
+  </div>
+</nav>
+<header class="hero">
+  <h1>WELCOME TO AMICART </h1>
+  <p class="subtitle">Your one-stop shop for Beauty, Fashion & Care</p>
+</header>
+<section class="slider-box">
+  <div class="slide active">
+    <img src="images/slider/beauty_ai.jpg" alt="Beauty Products">
+    <div class="slide-text">Beauty Products</div>
+  </div>
+  <div class="slide">
+    <img src="images/slider/skincare_ai.jpg" alt="Skincare Essentials">
+    <div class="slide-text">Skincare Essentials</div>
+  </div>
+  <div class="slide">
+    <img src="images/slider/fashion_ai.jpg" alt="Fashion & Style">
+    <div class="slide-text">Fashion & Style</div>
+  </div>
+</section>
+<div class="filter">
+  <div id="products"></div>
+</div>
+<div id="makeupSection"></div>
+<div id="skinSection"></div>
+<div id="hairSection"></div>
+<div id="clothesSection"></div>
+<div id="cartModal" class="modal">
+  <h2>AMICART</h2>
+  <div id="cartItems"></div>
+  <h3>Total: ₹<span id="totalPrice">0</span></h3>
+  <button onclick="checkout()">Checkout</button>
+  <button onclick="closeCart()">Close</button>
+</div>
+<div id="checkoutModal" class="modal">
+  <h2>Checkout</h2>
+  <form onsubmit="placeOrder(event)">
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="text" id="address" placeholder="Address" required>
+    <input type="number" id="phone" placeholder="Phone" required>
+    <select id="payment" required>
+      <option value="">Select Payment</option>
+      <option>UPI</option>
+      <option>Card</option>
+      <option>Cash on Delivery</option>
+    </select>
+    <button type="submit">Place Order</button>
+  </form>
+</div>
+<div id="loginModal" class="modal">
+  <h2>User Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <button onclick="login()">Login</button>
+</div>
+<div id="wishlistModal" class="modal">
+  <h2>Wishlist</h2>
+  <div id="wishlistItems"></div>
+  <button onclick="closeWishlist()">Close</button>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
