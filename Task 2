@@ -1,0 +1,299 @@
+HTML:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AMICART - Mini E-Commerce</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+  <h1>🛒 AMICART</h1>
+  <div class="nav-right">
+    <input 
+      type="text" 
+      id="searchInput" 
+      placeholder="Search products..." 
+      onkeyup="searchProducts()" 
+      class="search-box"
+    >
+    <button onclick="showLogin()">Login</button>
+    <button onclick="openCart()">Cart (<span id="cartCount">0</span>)</button>
+    <button onclick="openWishlist()">Wishlist</button>
+  </div>
+</nav>
+<header class="hero">
+  <h1>WELCOME TO AMICART </h1>
+  <p class="subtitle">Your one-stop shop for Beauty, Fashion & Care</p>
+</header>
+<section class="slider-box">
+  <div class="slide active">
+    <img src="images/slider/beauty_ai.jpg" alt="Beauty Products">
+    <div class="slide-text">Beauty Products</div>
+  </div>
+  <div class="slide">
+    <img src="images/slider/skincare_ai.jpg" alt="Skincare Essentials">
+    <div class="slide-text">Skincare Essentials</div>
+  </div>
+  <div class="slide">
+    <img src="images/slider/fashion_ai.jpg" alt="Fashion & Style">
+    <div class="slide-text">Fashion & Style</div>
+  </div>
+</section>
+<div class="filter">
+  <div id="products"></div>
+</div>
+<div id="makeupSection"></div>
+<div id="skinSection"></div>
+<div id="hairSection"></div>
+<div id="clothesSection"></div>
+<div id="cartModal" class="modal">
+  <h2>AMICART</h2>
+  <div id="cartItems"></div>
+  <h3>Total: ₹<span id="totalPrice">0</span></h3>
+  <button onclick="checkout()">Checkout</button>
+  <button onclick="closeCart()">Close</button>
+</div>
+<div id="checkoutModal" class="modal">
+  <h2>Checkout</h2>
+  <form onsubmit="placeOrder(event)">
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="text" id="address" placeholder="Address" required>
+    <input type="number" id="phone" placeholder="Phone" required>
+    <select id="payment" required>
+      <option value="">Select Payment</option>
+      <option>UPI</option>
+      <option>Card</option>
+      <option>Cash on Delivery</option>
+    </select>
+    <button type="submit">Place Order</button>
+  </form>
+</div>
+<div id="loginModal" class="modal">
+  <h2>User Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <button onclick="login()">Login</button>
+</div>
+<div id="wishlistModal" class="modal">
+  <h2>Wishlist</h2>
+  <div id="wishlistItems"></div>
+  <button onclick="closeWishlist()">Close</button>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
+
+CSS:
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #F3E8FF; 
+}
+nav {
+  background: #ff83b4;
+  color:rgb(71, 24, 71);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.search-box {
+  padding: 8px 14px;
+  width: 220px;
+  border-radius: 20px;
+  border: 1px solid #c25c5c;
+  outline: none;
+  font-size: 14px;
+}
+nav button {
+  margin-left: 10px;
+  padding: 6px 10px;
+}
+.slider-box {
+  width: 90%;
+  max-width: 1000px;
+  margin: 30px auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  position: relative;
+}
+.slider-box .slide {
+  display: none;
+  position: relative;
+}
+.slider-box .slide.active {
+  display: block;
+}
+.slider-box img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+}
+.slide-text {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background:#FFFFFF(255, 105, 180, 0.85);
+  color: white;
+  padding: 12px 24px;
+  font-size: 26px;
+  font-family: "Times New Roman", serif;
+  border-radius: 30px;
+}
+@keyframes fade {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+.filter {
+  text-align: center;
+  margin: 20px;
+}
+.filter button {
+  margin: 5px;
+}
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 20px;
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 15px;
+  text-align: center;
+}
+.card button {
+  margin: 5px;
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 10%;
+  left: 25%;
+  width: 50%;
+  background: white;
+  padding: 20px;
+  border: 2px solid black;
+}
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+.card:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+@keyframes slideFromLeft {
+  from {
+    transform: translateX(-60px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-in {
+  animation: slideFromLeft 0.6s ease forwards;
+}
+.category-title {
+  margin: 30px 20px 10px;
+  background: #eb6ea0;
+  color: rgb(248, 242, 242);
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+.welcome {
+  background: #3A1C5A;
+  text-align: center;
+  padding: 30px 20px;
+}
+.welcome-title {
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 36px;   /* slightly increased */
+  font-weight: bold;
+  color: #4a0033;
+  margin-bottom: 8px;
+}
+.welcome-subtitle {
+  font-family: "Brush Script MT", "Lucida Handwriting", cursive;
+  font-size: 22px;   /* increased 1–2 levels */
+  color: #0c050a;
+}
+.search-box {
+  padding: 8px 12px;
+  width: 220px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  margin-right: 10px;
+}
+.hero 
+{
+  background: linear-gradient(to up, #db2cc4, #ffd9ce);
+  padding: 40px;
+  text-align: center;
+  color: #222;
+}
+.hero h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+.subtitle {
+  font-family: "Brush Script MT", cursive;  
+  font-size: 24px;                           
+  text-align: center;
+  margin-top: 8px;
+  color: #240a19;
+}
+.product-img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.cart-btn {
+  background: #ff72b8;
+  border: none;
+  padding: 8px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  flex: 1;
+}
+.wish-btn {
+  background: #fdfcfc;
+  border: 2px solid #db46b6;
+  padding: 8px;
+  color: #ff1493;
+  cursor: pointer;
+  border-radius: 5px;
+  flex: 1;
+}
+.wish-btn:hover {
+  background: #ffffff;
+}
+
+JS:
